@@ -1,0 +1,21 @@
+#include <stdbool.h>
+#include <stdio.h>
+bool threeVowels(char string[]) {
+  int i;
+  for (i = 0; i < 16; i++) {
+    printf("%c", string[i]);
+  }
+  printf("\n");
+  return false;
+}
+
+int main() {
+  FILE *fptr;
+  fptr = fopen("day5.txt", "r");
+  char myString[18];
+  while (fgets(myString, 18, fptr)) {
+    threeVowels(myString);
+  }
+  fclose(fptr);
+  return 0;
+}
