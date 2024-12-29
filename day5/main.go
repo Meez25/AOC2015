@@ -16,12 +16,11 @@ func main() {
 	countP2 := 0
 	lines := bytes.Split(bytes.TrimSpace(inputFile), []byte("\n"))
 	for _, line := range lines {
-		if doesNotContains(line) {
-			if check3Vowels(line) && doublechar(line) {
-				count++
-			}
+		if doesNotContains(line) && check3Vowels(line) && doublechar(line) {
+			count++
 		}
-		if part2FirstRule(line) && part2SecondRule(line) {
+
+		if part2SecondRule(line) && part2FirstRule(line) {
 			countP2++
 		}
 	}
@@ -36,10 +35,13 @@ func check3Vowels(input []byte) bool {
 		for _, vowel := range vowels {
 			if char == vowel {
 				count++
+				if count >= 3 {
+					return true
+				}
 			}
 		}
 	}
-	return count >= 3
+	return false
 }
 
 func doublechar(input []byte) bool {
@@ -73,7 +75,7 @@ type Position struct {
 }
 
 func part2FirstRule(input []byte) bool {
-	pairMap := make(map[string][]int)
+	pairMap := make(map[string][]int, len(input)-1)
 
 	for i := 0; i < len(input)-1; i++ {
 		pair := string(input[i : i+2])
