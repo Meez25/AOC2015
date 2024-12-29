@@ -13,6 +13,7 @@ var inputFile []byte
 func main() {
 	start := time.Now()
 	count := 0
+	countP2 := 0
 	lines := bytes.Split(bytes.TrimSpace(inputFile), []byte("\n"))
 	for _, line := range lines {
 		if doesNotContains(line) {
@@ -20,8 +21,12 @@ func main() {
 				count++
 			}
 		}
+		if part2FirstRule(line) && part2SecondRule(line) {
+			countP2++
+		}
 	}
 	fmt.Println("Part 1:", count, "in", time.Since(start))
+	fmt.Println("Part 2:", countP2, "in", time.Since(start))
 }
 
 func check3Vowels(input []byte) bool {
@@ -60,4 +65,41 @@ func doesNotContains(input []byte) bool {
 		}
 	}
 	return true
+}
+
+type Position struct {
+	start int
+	value []byte
+}
+
+func part2FirstRule(input []byte) bool {
+	pairMap := make(map[string][]int)
+
+	for i := 0; i < len(input)-1; i++ {
+		pair := string(input[i : i+2])
+		pairMap[pair] = append(pairMap[pair], i)
+	}
+
+	for _, positions := range pairMap {
+		if len(positions) < 2 {
+			continue
+		}
+		for i := 0; i < len(positions); i++ {
+			for j := i + 1; j < len(positions); j++ {
+				if positions[j]-positions[i] > 1 {
+					return true
+				}
+			}
+		}
+	}
+	return false
+}
+
+func part2SecondRule(input []byte) bool {
+	for i := 0; i < len(input)-2; i++ {
+		if input[i] == input[i+2] {
+			return true
+		}
+	}
+	return false
 }
